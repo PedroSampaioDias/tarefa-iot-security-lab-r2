@@ -18,7 +18,7 @@ void connect_to_wifi(const char *ssid, const char *password) {
 
     // Tenta conectar à rede Wi-Fi com um tempo limite de 30 segundos (30000 ms).
     // Utiliza autenticação WPA2 com criptografia AES.
-    if (cyw43_arch_wifi_connect_timeout_ms(ssid, password, CYW43_AUTH_WPA2_AES_PSK, 30000)) {
+    if (cyw43_arch_wifi_connect_timeout_ms(ssid, password, CYW43_AUTH_WPA2_AES_PSK, 50000)) {
         printf("Erro ao conectar\n");  // Se falhar, imprime mensagem de erro.
     } else {        
         printf("Conectado ao Wi-Fi\n");  // Se conectar com sucesso, exibe confirmação.
