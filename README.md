@@ -2,13 +2,13 @@
 
 # Tarefa: IoT Security Lab - EmbarcaTech 2025
 
-Autor: **Insira Seu Nome**
+Autores: **Andre de Oliveira Melo e Pedro Sampaio Dias**
 
 Curso: Residência Tecnológica em Sistemas Embarcados
 
 Instituição: EmbarcaTech - HBr
 
-Campinas, ___ de 2025
+Brasília, maio de 2025
 
 ---
 
@@ -127,6 +127,19 @@ listener 1883 0.0.0.0
 allow_anonymous false
 password_file /etc/mosquitto/passwd
 ```
+## Simulando criptografia leve - XOR (Etapa 5)
+![Decode do XOR no terminal](images/xor-decode.png) 
+*Visualização no terminal da mensagem cifrada e decifrada utiilzando XOR*
+![Broker no terminal](images/xor-terminal.png)  
+*Visualização do broker no terminal*
+![Wireshark](images/xor-wireshark.png) 
+*Visualização dos pacotes no wireshark*
+
+## Proteção contra replay (Etapa 6)
+![TImestamp](images/timestamp.png) 
+*Os terminais na parte superior da tela mostram à esquerda a mensagem recebida com timestamp e à direita a "bitdoglab1" publicando. Já na parte inferior, temos a "bitdoglab2" que atua como publisher e subscriber, recebendo as mensagens da outra placa, com timestamp*
+
+
 
 ### Teste de autenticação no Mosquitto
 
