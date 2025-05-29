@@ -127,6 +127,11 @@ listener 1883 0.0.0.0
 allow_anonymous false
 password_file /etc/mosquitto/passwd
 ```
+### Teste de autenticação no Mosquitto
+
+![Broker, Recebimento/Envio no terminal e Wireshark](images/broker-recebimento-wireshark-com-seguranca.png)  
+*Na parte superior esquerda do terminal, é exibido o valor recebido em texto plano (sem criptografia). No canto inferior esquerdo, aparece o log do servidor MQTT com o modo verbose ativado. No canto superior direito, são mostradas as mensagens publicadas, e no Wireshark observa-se a captura dos pacotes MQTTS.* 
+
 ## Simulando criptografia leve - XOR (Etapa 5)
 ![Decode do XOR no terminal](images/xor-decode.png) 
 *Visualização no terminal da mensagem cifrada e decifrada utiilzando XOR*
@@ -139,9 +144,36 @@ password_file /etc/mosquitto/passwd
 ![TImestamp](images/timestamp.png) 
 *Os terminais na parte superior da tela mostram à esquerda a mensagem recebida com timestamp e à direita a "bitdoglab1" publicando. Já na parte inferior, temos a "bitdoglab2" que atua como publisher e subscriber, recebendo as mensagens da outra placa, com timestamp*
 
+## Etapa Final - relato e análise
 
+### Quais técnicas são escaláveis?
 
-### Teste de autenticação no Mosquitto
+**Autenticação:** Cada BitDogLab recebe identidade única na configuração do broker, para permitir apenas dispositivos autenticados e melhorar a rastreabilidade
 
-![Broker, Recebimento/Envio no terminal e Wireshark](images/broker-recebimento-wireshark-com-seguranca.png)  
-*Na parte superior esquerda do terminal, é exibido o valor recebido em texto plano (sem criptografia). No canto inferior esquerdo, aparece o log do servidor MQTT com o modo verbose ativado. No canto superior direito, são mostradas as mensagens publicadas, e no Wireshark observa-se a captura dos pacotes MQTTS.* 
+**Tópicos MQTT hierárquicos:** Estrutura como `escola/sala/bancada/dispositivo` permite gerenciar vários dispositivos de forma organizada.
+
+**Criptografia ChaCha20-Poly1305:** Leve e eficiente, funciona bem mesmo com centenas de dispositivos com poder limitado de processamento.
+
+**Proteção anti-replay com timestamps:** Cada mensagem tem prova própria de autenticidade, sem estados compartilhados complexos.
+
+### Como aplicá-las com várias BitDogLab em rede escolar?
+
+**Infraestrutura:**
+- Servidores locais (BitDogLab) como publishers e subscribers
+- Redes Wi-Fi segmentadas por função (básica/avançada/demo)
+- Broker MQTT central com rate limiting, QoS e como Autoridade Certificadora
+
+**Gerenciamento:**
+- Dashboard web para monitorar todos os dispositivos
+- Provisionamento automático de novos dispositivos
+- Rotação de chaves programada para fins de semana
+- Logs centralizados para detectar anomalias
+
+**Implementação:**
+- Iniciar com laboratório piloto
+- Expandir gradualmente após validação
+- Treinar equipe técnica nos procedimentos
+- Documentar troubleshooting comum
+
+Esta abordagem permite crescer de poucos dispositivos para centenas mantendo segurança e facilidade de gerenciamento.
+
