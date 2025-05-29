@@ -2,14 +2,16 @@
 
 # Tarefa: IoT Security Lab - EmbarcaTech 2025
 
-Autor: **Insira Seu Nome**
+Autores: **Andre de Oliveira Melo e Pedro Sampaio Dias**
 
 Curso: Residência Tecnológica em Sistemas Embarcados
 
 Instituição: EmbarcaTech - HBr
 
-Campinas, ___ de 2025
+Brasília, maio de 2025
 
+---
+**OBS: ESTA BRANCH É UM FORK DA BRANCH PRINCIPAL COM CÓDIGO DE SUBSCRIBER NA BITDOGLAB**
 ---
 
 # Instalação e configuração do Mosquitto
@@ -79,56 +81,3 @@ sudo mosquitto_passwd -c /etc/mosquitto/passwd meu_usuario
 ```bash
 sudo systemctl restart mosquitto
 ```
-# Relatório das etapas
-
-## Conectando ao Wifi e Setup MQTT (Etapa 1 e 2)
-
-### Compilado com sucesso: 
-
-![Build compilado com sucesso](images/compilado.png)  
-*O código foi compilado corretamente, sem erros de sintaxe ou dependências faltando.*
-
-### Wifi e MQTT conectado: 
-
-![Wi-Fi e MQTT conectados](images/wifi-mqtt.png)  
-*O dispositivo estabeleceu conexão com a rede “WiFi-Pedro” e registrou-se no broker MQTT sem problemas, como é possível ver no print da saída serial.*  
-
-```c
-// Conecta à rede WiFi
-// Parâmetros: Nome da rede (SSID) e senha
-connect_to_wifi("WiFi-Pedro", "@09090909@");
-
-// Configura o cliente MQTT
-// Parâmetros: ID do cliente, IP do broker, usuário, senha
-mqtt_setup("bitdog1", "192.168.0.214", NULL, NULL);
-```
-## Publicação MQTT sem segurança (Etapa 3)
-
-### Publicação e recebimento do pacote MQTT
-
-![Broker, Recebimento no terminal e Wireshark](images/broker-recebimento-wireshark.png)  
-*No terminal, esquerda superior, é exibido o valor recebido em texto não criptografado. No canto inferior esquerdo, a saída serial da BitDogLab apresenta a publicação realizada. À direita, o Wireshark captura os pacotes MQTTS, mostrando timestamp, endereço de origem, endereço de destino, protocolo e o tópico MQTT (escola/sala1/temperatura).*  
-
-```c
-// Mensagem original a ser enviada
-const char *mensagem = "26.5";
-
-// Publica a mensagem original (não criptografada)
-mqtt_comm_publish("escola/sala1/temperatura", mensagem, strlen(mensagem));
-```
-
-## Publicação MQTT com segurança (Etapa 4)
-
-### Arquivo *.conf do Mosquitto
-
-```bash
->> /etc/mosquitto/conf.d/bind.conf                   
-listener 1883 0.0.0.0
-allow_anonymous false
-password_file /etc/mosquitto/passwd
-```
-
-### Teste de autenticação no Mosquitto
-
-![Broker, Recebimento/Envio no terminal e Wireshark](images/broker-recebimento-wireshark-com-seguranca.png)  
-*Na parte superior esquerda do terminal, é exibido o valor recebido em texto plano (sem criptografia). No canto inferior esquerdo, aparece o log do servidor MQTT com o modo verbose ativado. No canto superior direito, são mostradas as mensagens publicadas, e no Wireshark observa-se a captura dos pacotes MQTTS.* 
